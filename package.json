@@ -1,0 +1,15 @@
+{
+  "name": "pantainos-experiments",
+  "version": "0.1.0",
+  "description": "Experimental implementations and research for Pantainos",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test:claude-direct": "npx tsx src/claude-direct/test-direct-benchmark.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
