@@ -274,6 +274,60 @@ export class ClaudeDirect {
   }
 
   /**
+   * Raw inference call - returns full API response for tool loop
+   */
+  async queryRaw(options: QueryOptions & { tools?: any[] }): Promise<{
+    content: any[];
+    stop_reason: string;
+    usage: { input_tokens: number; output_tokens: number };
+    model: string;
+  }> {
+    // Feature flags (skipped in minimal mode)
+    if (!this.config.minimal) {
+      await this.fetchFeatureFlags();
+    }
+
+    // Build request body
+    const body: any = {
+      model: this.config.model,
+      max_tokens: options.maxTokens || 4096,
+      messages: options.messages,
+      metadata: {
+        user_id: `user_${this.config.deviceId}_session_${this.config.sessionId}`,
+      },
+    };
+
+    if (options.systemPrompt) {
+      body.system = options.systemPrompt;
+    }
+
+    if (options.tools && options.tools.length > 0) {
+      body.tools = options.tools;
+    }
+
+    // Make the inference call
+    const res = await fetch(`${API_BASE}/v1/messages?beta=true`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      throw new Error(`Inference failed: ${res.status} ${error}`);
+    }
+
+    const data = await res.json();
+
+    return {
+      content: data.content || [],
+      stop_reason: data.stop_reason,
+      usage: data.usage || { input_tokens: 0, output_tokens: 0 },
+      model: data.model,
+    };
+  }
+
+  /**
    * Streaming inference
    */
   async *queryStream(options: QueryOptions): AsyncGenerator<string, QueryResult, unknown> {
