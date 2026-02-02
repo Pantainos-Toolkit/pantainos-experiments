@@ -1,0 +1,33 @@
+services:
+  test:
+    build: .
+    environment:
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+      - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true
+      - CLAUDE_CODE_ENABLE_TELEMETRY=false
+    command: npm test
+
+  test-integration:
+    build: .
+    environment:
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+      - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true
+      - CLAUDE_CODE_ENABLE_TELEMETRY=false
+    command: npm run test:integration
+
+  test-benchmark:
+    build: .
+    environment:
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+      - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true
+      - CLAUDE_CODE_ENABLE_TELEMETRY=false
+    command: npm run test:benchmark
+
+  # Interactive shell for debugging
+  shell:
+    build: .
+    environment:
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+    command: sh
+    stdin_open: true
+    tty: true
