@@ -5,7 +5,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test:claude-direct": "npx tsx src/claude-direct/test-direct-benchmark.ts"
+    "typecheck": "tsc --noEmit",
+    "test": "npx tsx src/claude-direct/testing/run-all-tests.ts",
+    "test:unit": "npx tsx src/claude-direct/testing/run-all-tests.ts",
+    "test:integration": "npx tsx src/claude-direct/testing/run-all-tests.ts --integration",
+    "test:benchmark": "npx tsx src/claude-direct/testing/run-all-tests.ts --benchmark",
+    "test:all": "npx tsx src/claude-direct/testing/run-all-tests.ts --integration --benchmark"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
